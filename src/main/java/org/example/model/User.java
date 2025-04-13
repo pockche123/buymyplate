@@ -10,9 +10,9 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@MappedSuperclass
 @Getter
 @Setter
-@MappedSuperclass
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
