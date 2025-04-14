@@ -19,12 +19,21 @@ public class VehiclePlateDTO {
     private int vehicleId;
     @NotBlank
     private String plateNumber;
-    private boolean isPersonalised;
-    private boolean isAvailable;
+    private boolean personalised;
+
+
+    private boolean available;
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
     private double price;
     @Positive
     private Integer customerId;
+
+//    public boolean isAvailable() {
+//        return available;
+//    }
+
+
+
 
 }
