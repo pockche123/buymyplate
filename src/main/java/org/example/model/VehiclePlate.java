@@ -14,6 +14,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(
+        indexes = {
+                @Index(name="idx_plate_number", columnList = "plateNumber")
+        }
+)
 public class VehiclePlate {
 
     @Id
