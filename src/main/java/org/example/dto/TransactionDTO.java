@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,4 +28,5 @@ public class TransactionDTO {
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
     private double pricePaid;
+    private LocalDate localDate;
 }

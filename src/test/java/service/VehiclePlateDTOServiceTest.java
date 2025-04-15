@@ -48,8 +48,6 @@ public class VehiclePlateDTOServiceTest {
         assertTrue(vehiclePlateDTO.isAvailable());
         assertEquals(50.5, vehiclePlate.getPrice());
         assertNull(vehiclePlateDTO.getCustomerId());
-
-
     }
 
     @Test

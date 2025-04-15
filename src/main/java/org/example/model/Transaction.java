@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,5 +30,6 @@ public class Transaction {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_plate_id")
     private VehiclePlate plate;
-    private double pricePaid;
+    private Double pricePaid;
+    private LocalDate transactionDate;
 }

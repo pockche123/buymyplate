@@ -108,6 +108,7 @@ public class CustomerDTOServiceTest {
         assertEquals("user234", actualCustomer.getUsername());
         assertEquals("password21", actualCustomer.getPassword());
     }
+
     @Test
     public void test_replaceCustomer_throwRuntimeException(){
         Customer expectedCustomer = new Customer();
