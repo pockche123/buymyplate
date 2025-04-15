@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.CustomerDTO;
+import org.example.dto.CustomerRequestDTO;
 import org.example.model.Customer;
 import org.example.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,16 @@ public class CustomerDTOService {
         return optionalCustomerDTO.map(CustomerDTOService::convertToCustomerDTO).orElse(null);
     }
 
-    public CustomerDTO addCustomer(Customer customer){
+    public CustomerDTO addCustomer(CustomerRequestDTO customerRequestDTO){
+        if(customerRequestDTO.getFirstName() == null || customerRequestDTO.getLastName() == null || customerRequestDTO.getUsername() == null || customerRequestDTO.getPassword() == null){
+            return null;
+        }
+        Customer customer = new Customer();
+        customer.setId(customerRequestDTO.getCustomerId());
+        customer.setFirstName(customerRequestDTO.getFirstName());
+        customer.setLastName(customerRequestDTO.getLastName());
+        customer.setUsername(customerRequestDTO.getUsername());
+        customer.setPassword(customerRequestDTO.getPassword());
         customerRepository.save(customer);
         return convertToCustomerDTO(customer);
     }
