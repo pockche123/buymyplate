@@ -4,7 +4,13 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -22,4 +28,5 @@ public class TransactionDTO {
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
     private double pricePaid;
+    private LocalDate localDate;
 }
