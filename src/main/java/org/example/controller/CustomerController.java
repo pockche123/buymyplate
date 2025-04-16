@@ -48,13 +48,13 @@ public class CustomerController {
         if (customerDTO == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(customerDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
     }
 
     @PatchMapping("/v1/customers/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable int id, @RequestBody CustomerRequestDTO customer) {
         CustomerDTO customerDTO = customerDTOService.updateCustomer(id, customer);
-        return ResponseEntity.ok(customerDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
     }
 
     @DeleteMapping("/v1/customers/{id}")

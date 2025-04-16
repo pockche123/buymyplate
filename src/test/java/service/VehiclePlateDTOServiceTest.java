@@ -2,8 +2,10 @@ package service;
 
 
 import org.example.dto.VehiclePlateDTO;
+import org.example.dto.VehiclePlateRequestDTO;
 import org.example.model.Customer;
 import org.example.model.VehiclePlate;
+import org.example.repository.CustomerRepository;
 import org.example.repository.VehiclePlateRepository;
 import org.example.service.VehiclePlateDTOService;
 import org.junit.jupiter.api.Test;
@@ -20,11 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +35,9 @@ public class VehiclePlateDTOServiceTest {
     @Mock
     public VehiclePlateRepository vehiclePlateRepository;
 
+    @Mock
+    public CustomerRepository customerRepository;
+
     @Test
     public void test_convertToVehiclePlateDTO(){
         VehiclePlate vehiclePlate = new VehiclePlate(1,"sa12 uvw", true,true,50.50, null);
@@ -44,8 +45,8 @@ public class VehiclePlateDTOServiceTest {
 
         assertEquals(1, vehiclePlateDTO.getVehicleId());
         assertEquals("sa12 uvw", vehiclePlateDTO.getPlateNumber());
-        assertTrue(vehiclePlateDTO.isPersonalised());
-        assertTrue(vehiclePlateDTO.isAvailable());
+        assertTrue(vehiclePlateDTO.getPersonalised());
+        assertTrue(vehiclePlateDTO.getAvailable());
         assertEquals(50.5, vehiclePlate.getPrice());
         assertNull(vehiclePlateDTO.getCustomerId());
     }
@@ -112,29 +113,42 @@ public class VehiclePlateDTOServiceTest {
 
     @Test
     public void test_addVehiclePlate(){
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 uvw", true,true,50.50, new Customer());
+        Customer customer = new Customer();
+        customer.setId(1);
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 uvw", true,true,50.50, customer);
+        VehiclePlateRequestDTO vehiclePlateRequestDTO =  new VehiclePlateRequestDTO(1,"sa12 uvw", true,true,50.50, 1);
+        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
         when(vehiclePlateRepository.save(any(VehiclePlate.class))).thenReturn(vehiclePlate);
 
-        VehiclePlateDTO actualDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlate);
+        VehiclePlateDTO actualDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO);
 
+
+        assertNotNull(actualDTO);
         assertEquals(1, actualDTO.getVehicleId());
         assertEquals("sa12 uvw", actualDTO.getPlateNumber());
-        assertTrue(vehiclePlate.getPersonalised());
+       assertTrue(vehiclePlate.getPersonalised());
         assertTrue(vehiclePlate.getAvailable());
+        assertEquals(50.5, vehiclePlate.getPrice());
+        assertEquals(1, actualDTO.getCustomerId());
     }
 
     @Test
     public void test_replaceVehiclePlates(){
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer());
-        VehiclePlate expectedVehiclePlate =  new VehiclePlate(1,"su88 4ky", false,false,80.00, new Customer());
+        Customer customer = new Customer();
+        customer.setId(1);
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, customer);
+        VehiclePlateRequestDTO expectedVehiclePlate =  new VehiclePlateRequestDTO(1,"su88 4ky", false,false,80.00,1);
 
         when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(vehiclePlate));
+        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
 
         VehiclePlateDTO actualVehiclePlateDTO = vehiclePlateDTOService.replaceVehiclePlate(1, expectedVehiclePlate);
 
+        assertNotNull(actualVehiclePlateDTO);
+
         assertEquals("su88 4ky", actualVehiclePlateDTO.getPlateNumber());
-        assertFalse(actualVehiclePlateDTO.isAvailable());
-        assertFalse(actualVehiclePlateDTO.isPersonalised());
+        assertFalse(actualVehiclePlateDTO.getAvailable());
+        assertFalse(actualVehiclePlateDTO.getPersonalised());
         assertEquals(80.00, actualVehiclePlateDTO.getPrice());
     }
 
@@ -143,7 +157,7 @@ public class VehiclePlateDTOServiceTest {
         when(vehiclePlateRepository.findById(2)).thenThrow(new RuntimeException("Vehicle Plate not found"));
 
         assertThrows(RuntimeException.class, () -> {
-            vehiclePlateDTOService.replaceVehiclePlate(2, new VehiclePlate());
+            vehiclePlateDTOService.replaceVehiclePlate(2, new VehiclePlateRequestDTO());
         });
 
         verify(vehiclePlateRepository).findById(2);
@@ -152,7 +166,7 @@ public class VehiclePlateDTOServiceTest {
     @Test
     public void test_updateVehiclePlates(){
         VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer());
-        VehiclePlate expectedVehiclePlate = new VehiclePlate();
+        VehiclePlateRequestDTO expectedVehiclePlate = new VehiclePlateRequestDTO();
         expectedVehiclePlate.setPrice(100.0);
         expectedVehiclePlate.setPersonalised(false);
         expectedVehiclePlate.setAvailable(false);
@@ -163,8 +177,8 @@ public class VehiclePlateDTOServiceTest {
         VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.updateVehiclePlate(1,expectedVehiclePlate);
 
         assertEquals(100.0, vehiclePlateDTO.getPrice());
-        assertFalse(vehiclePlateDTO.isPersonalised());
-        assertFalse(vehiclePlateDTO.isAvailable());
+        assertFalse(vehiclePlateDTO.getPersonalised());
+        assertFalse(vehiclePlateDTO.getAvailable());
         assertEquals("ali6", vehiclePlateDTO.getPlateNumber());
 
     }
@@ -174,7 +188,7 @@ public class VehiclePlateDTOServiceTest {
         when(vehiclePlateRepository.findById(2)).thenThrow(new RuntimeException("Vehicle Plate not found"));
 
         assertThrows(RuntimeException.class, () -> {
-            vehiclePlateDTOService.updateVehiclePlate(2, new VehiclePlate());
+            vehiclePlateDTOService.updateVehiclePlate(2, new VehiclePlateRequestDTO());
         });
 
         verify(vehiclePlateRepository).findById(2);

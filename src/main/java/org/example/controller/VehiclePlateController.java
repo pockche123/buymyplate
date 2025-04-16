@@ -1,15 +1,14 @@
 package org.example.controller;
 
 import org.example.dto.VehiclePlateDTO;
+import org.example.dto.VehiclePlateRequestDTO;
 import org.example.service.VehiclePlateDTOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class VehiclePlateController {
@@ -36,6 +35,39 @@ public class VehiclePlateController {
     @GetMapping("/v1/vehiclePlates/{id}")
     public ResponseEntity<VehiclePlateDTO> getVehiclePlateById(@PathVariable int id) {
         return ResponseEntity.ok(vehiclePlateDTOService.findVehiclePlateById(id));
+    }
+
+    @PostMapping("/v1/vehiclePlates")
+    public ResponseEntity<VehiclePlateDTO> createVehiclePlate(@RequestBody VehiclePlateRequestDTO vehiclePlateRequestDTO) {
+        VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO);
+        if(vehiclePlateDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(vehiclePlateDTO);
+    }
+
+    @PutMapping("/v1/vehiclePlates/{id}")
+    public ResponseEntity<VehiclePlateDTO> replaceVehiclePlate(@PathVariable int id, @RequestBody VehiclePlateRequestDTO vehiclePlateRequestDTO) {
+        VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.replaceVehiclePlate(id, vehiclePlateRequestDTO);
+        if(vehiclePlateDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(vehiclePlateDTO);
+    }
+
+    @PatchMapping("/v1/vehiclePlates/{id}")
+    public ResponseEntity<VehiclePlateDTO> updateVehiclePlate(@PathVariable int id, @RequestBody VehiclePlateRequestDTO vehiclePlateRequestDTO) {
+        VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.updateVehiclePlate(id, vehiclePlateRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(vehiclePlateDTO);
+    }
+
+    @DeleteMapping("/v1/vehiclePlates/{id}")
+    public ResponseEntity<VehiclePlateDTO> deleteVehiclePlate(@PathVariable int id) {
+        boolean result = vehiclePlateDTOService.deleteVehiclePlate(id);
+        if(!result){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

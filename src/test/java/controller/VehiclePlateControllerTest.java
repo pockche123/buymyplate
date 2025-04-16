@@ -2,6 +2,7 @@ package controller;
 
 import org.example.controller.VehiclePlateController;
 import org.example.dto.VehiclePlateDTO;
+import org.example.dto.VehiclePlateRequestDTO;
 import org.example.service.VehiclePlateDTOService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,6 +71,81 @@ public class VehiclePlateControllerTest {
         assertEquals(vehiclePlateDTO, actual.getBody());
     }
 
+    @Test
+    public void test_addVehiclePlate(){
+        VehiclePlateDTO vehiclePlateDTO =   new VehiclePlateDTO(1, "sa12uvw", false, false, 20.30, 1);
+        VehiclePlateRequestDTO vehiclePlateRequestDTO =   new VehiclePlateRequestDTO(1, "sa12uvw", false, false, 20.30, 1);
+
+        when(vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO)).thenReturn(vehiclePlateDTO);
+
+        ResponseEntity<VehiclePlateDTO> actual = vehiclePlateController.createVehiclePlate(vehiclePlateRequestDTO);
+        assertNotNull(actual);
+        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+        assertEquals(vehiclePlateDTO, actual.getBody());
+    }
+
+    @Test
+    public void test_addVehiclePlate_ReturnsBadRequest(){
+        VehiclePlateRequestDTO vehiclePlateRequestDTO = new VehiclePlateRequestDTO();
+        when(vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO)).thenReturn(null);
+
+        ResponseEntity<VehiclePlateDTO> actual = vehiclePlateController.createVehiclePlate(vehiclePlateRequestDTO);
+
+        assertNotNull(actual);
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+    }
+
+    @Test
+    public void test_replaceVehiclePlate(){
+        VehiclePlateDTO vehiclePlateDTO =   new VehiclePlateDTO(1, "sa12uvw", false, false, 20.30, 1);
+        VehiclePlateRequestDTO vehiclePlateRequestDTO =   new VehiclePlateRequestDTO(1, "sa12uvw", false, false, 20.30, 1);
+
+        when(vehiclePlateDTOService.replaceVehiclePlate(1, vehiclePlateRequestDTO)).thenReturn(vehiclePlateDTO);
+
+        ResponseEntity<VehiclePlateDTO> actual = vehiclePlateController.replaceVehiclePlate(1, vehiclePlateRequestDTO);
+        assertNotNull(actual);
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(vehiclePlateDTO, actual.getBody());
+    }
+
+    @Test
+    public void test_replaceVehiclePlate_ReturnsBadRequest(){
+        VehiclePlateRequestDTO vehiclePlateRequestDTO =   new VehiclePlateRequestDTO();
+        when(vehiclePlateDTOService.replaceVehiclePlate(1, vehiclePlateRequestDTO)).thenReturn(null);
+
+        ResponseEntity<VehiclePlateDTO>actual = vehiclePlateController.replaceVehiclePlate(1, vehiclePlateRequestDTO);
+
+        assertNotNull(actual);
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+    }
 
 
+    @Test
+    public void test_updateVehiclePlate(){
+        VehiclePlateDTO vehiclePlateDTO =   new VehiclePlateDTO(1, "sa12uvw", false, false, 20.30, 1);
+
+        VehiclePlateRequestDTO vehiclePlateRequestDTO = new VehiclePlateRequestDTO();
+        vehiclePlateRequestDTO.setPlateNumber("sa12 uvw");
+        when(vehiclePlateDTOService.updateVehiclePlate(1, vehiclePlateRequestDTO)).thenReturn(vehiclePlateDTO);
+
+        ResponseEntity<VehiclePlateDTO> actual = vehiclePlateController.updateVehiclePlate(1, vehiclePlateRequestDTO);
+
+        assertNotNull(actual);
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+    }
+
+
+    @Test
+    public void test_deleteVehiclePlate_returnsTrueAndFalse(){
+
+        when(vehiclePlateDTOService.deleteVehiclePlate(1)).thenReturn(true);
+        when(vehiclePlateDTOService.deleteVehiclePlate(2)).thenReturn(false);
+
+        ResponseEntity<VehiclePlateDTO> result =  vehiclePlateController.deleteVehiclePlate(1);
+        ResponseEntity<VehiclePlateDTO> resultFalse = vehiclePlateController.deleteVehiclePlate(2);
+
+        assertNotNull(result);
+        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, resultFalse.getStatusCode());
+    }
 }
