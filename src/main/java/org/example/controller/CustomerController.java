@@ -41,9 +41,29 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
 
     }
-//
-//    @PutMapping("/v1/customers")
-//    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody Customer customer) {}
 
+    @PutMapping("/v1/customers/{id}")
+    public ResponseEntity<CustomerDTO> replaceCustomer(@PathVariable int id, @RequestBody CustomerRequestDTO customer) {
+        CustomerDTO customerDTO = customerDTOService.replaceCustomer(id, customer);
+        if (customerDTO == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(customerDTO);
+    }
+
+    @PatchMapping("/v1/customers/{id}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable int id, @RequestBody CustomerRequestDTO customer) {
+        CustomerDTO customerDTO = customerDTOService.updateCustomer(id, customer);
+        return ResponseEntity.ok(customerDTO);
+    }
+
+    @DeleteMapping("/v1/customers/{id}")
+    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable int id) {
+        boolean result = customerDTOService.deleteCustomer(id);
+        if(!result){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 }
