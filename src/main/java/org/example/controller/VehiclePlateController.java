@@ -33,5 +33,10 @@ public class VehiclePlateController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/v1/vehiclePlates/{id}")
+    public ResponseEntity<VehiclePlateDTO> getVehiclePlateById(@PathVariable int id) {
+        return ResponseEntity.ok(vehiclePlateDTOService.findVehiclePlateById(id));
+    }
+
 
 }

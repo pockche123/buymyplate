@@ -58,4 +58,18 @@ public class VehiclePlateControllerTest {
         assertEquals(page, actual.getBody());
     }
 
+    @Test
+    public void test_getVehiclePlateById(){
+        VehiclePlateDTO vehiclePlateDTO =   new VehiclePlateDTO(1, "sa12uvw", false, false, 20.30, 1);
+        when(vehiclePlateDTOService.findVehiclePlateById(1)).thenReturn(vehiclePlateDTO);
+
+        ResponseEntity<VehiclePlateDTO> actual = vehiclePlateController.getVehiclePlateById(1);
+
+        assertNotNull(actual);
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(vehiclePlateDTO, actual.getBody());
+    }
+
+
+
 }
