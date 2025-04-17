@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface VehiclePlateRepository extends JpaRepository<VehiclePlate, Integer> {
     Page<VehiclePlate> findAll(Pageable pageable);
 
-    @Query("SELECT v from VehiclePlate v WHERE lower(v.plateNumber) LIKE lower(CONCAT('%',:plate, '%'))")
+    @Query("SELECT v from VehiclePlate v WHERE lower(v.plateNumber) LIKE lower(CONCAT(:plate, '%'))")
     Page<VehiclePlate> searchByPartialPlate(@Param("plate") String plate, Pageable pageable );
 
 }
