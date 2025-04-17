@@ -1,7 +1,7 @@
 package org.example.dto;
 
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
@@ -10,30 +10,23 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class VehiclePlateDTO {
-    private Integer vehicleId;
-    @NotBlank
-    private String plateNumber;
-    private Boolean personalised;
-
-
-    private Boolean available;
+public class TransactionRequestDTO {
+    private Integer transactionId;
+    @Positive
+    @NotNull
+    private Integer customerId;
+    @Positive
+    @NotNull
+    private Integer vehiclePlateId;
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
-    private Double price;
-    @Positive
-    private Integer customerId;
-
-//    public boolean isAvailable() {
-//        return available;
-//    }
-
-
-
-
+    private Double pricePaid;
+    private LocalDate transactionDate;
 }

@@ -15,25 +15,15 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class VehiclePlateDTO {
+public class VehiclePlateRequestDTO {
     private Integer vehicleId;
     @NotBlank
     private String plateNumber;
     private Boolean personalised;
-
-
     private Boolean available;
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
     private Double price;
     @Positive
     private Integer customerId;
-
-//    public boolean isAvailable() {
-//        return available;
-//    }
-
-
-
-
 }

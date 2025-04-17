@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.CustomerDTO;
+import org.example.dto.CustomerRequestDTO;
 import org.example.model.Customer;
 import org.example.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,35 +41,48 @@ public class CustomerDTOService {
         return optionalCustomerDTO.map(CustomerDTOService::convertToCustomerDTO).orElse(null);
     }
 
-    public CustomerDTO addCustomer(Customer customer){
+    public CustomerDTO addCustomer(CustomerRequestDTO customerRequestDTO){
+        if(customerRequestDTO.getFirstName() == null || customerRequestDTO.getLastName() == null || customerRequestDTO.getUsername() == null || customerRequestDTO.getPassword() == null){
+            return null;
+        }
+        Customer customer = new Customer();
+        customer.setId(customerRequestDTO.getCustomerId());
+        customer.setFirstName(customerRequestDTO.getFirstName());
+        customer.setLastName(customerRequestDTO.getLastName());
+        customer.setUsername(customerRequestDTO.getUsername());
+        customer.setPassword(customerRequestDTO.getPassword());
         customerRepository.save(customer);
         return convertToCustomerDTO(customer);
     }
 
-    public CustomerDTO replaceCustomer(int id, Customer customer){
+    public CustomerDTO replaceCustomer(int id, CustomerRequestDTO customerRequestDTO){
         Customer existingCustomer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
 
-        existingCustomer.setUsername(customer.getUsername());
-        existingCustomer.setFirstName(customer.getFirstName());
-        existingCustomer.setLastName(customer.getLastName());
-        existingCustomer.setPassword(customer.getPassword());
+        if(customerRequestDTO.getFirstName() == null || customerRequestDTO.getLastName() == null || customerRequestDTO.getUsername() == null || customerRequestDTO.getPassword() == null){
+            return null;
+        }
+
+        existingCustomer.setUsername(customerRequestDTO.getUsername());
+        existingCustomer.setFirstName(customerRequestDTO.getFirstName());
+        existingCustomer.setLastName(customerRequestDTO.getLastName());
+        existingCustomer.setPassword(customerRequestDTO.getPassword());
         return convertToCustomerDTO(existingCustomer);
     }
 
-    public CustomerDTO updateCustomer(int id, Customer customer){
+    public CustomerDTO updateCustomer(int id, CustomerRequestDTO customerRequestDTO){
         Customer existingCustomer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
 
-        if(customer.getUsername()!=null){
-            existingCustomer.setUsername(customer.getUsername());
+        if(customerRequestDTO.getUsername()!=null){
+            existingCustomer.setUsername(customerRequestDTO.getUsername());
         }
-        if(customer.getFirstName() != null){
-            existingCustomer.setFirstName(customer.getFirstName());
+        if(customerRequestDTO.getFirstName() != null){
+            existingCustomer.setFirstName(customerRequestDTO.getFirstName());
         }
-        if(customer.getLastName() != null){
-            existingCustomer.setLastName(customer.getLastName());
+        if(customerRequestDTO.getLastName() != null){
+            existingCustomer.setLastName(customerRequestDTO.getLastName());
         }
-        if(customer.getPassword() != null){
-            existingCustomer.setPassword(customer.getPassword());
+        if(customerRequestDTO.getPassword() != null){
+            existingCustomer.setPassword(customerRequestDTO.getPassword());
         }
         return convertToCustomerDTO(existingCustomer);
 

@@ -1,6 +1,7 @@
 package service;
 
 import org.example.dto.CustomerDTO;
+import org.example.dto.CustomerRequestDTO;
 import org.example.model.Customer;
 import org.example.repository.CustomerRepository;
 import org.example.service.CustomerDTOService;
@@ -85,10 +86,12 @@ public class CustomerDTOServiceTest {
 
     @Test
     public void test_addCustomer(){
+        CustomerRequestDTO customerRequestDTO = new CustomerRequestDTO(1, "user123", "password12", "John","Doe");
+
         Customer customer = new Customer(1, "user123", "password12", "John","Doe");
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
-        CustomerDTO actualDTO = customerDTOService.addCustomer(customer);
+        CustomerDTO actualDTO = customerDTOService.addCustomer(customerRequestDTO);
 
         assertEquals(1, actualDTO.getCustomerId());
     }
@@ -96,7 +99,7 @@ public class CustomerDTOServiceTest {
     @Test
     public void test_replaceCustomer(){
         Customer customer = new Customer(1, "user123", "password12", "John","Doe");
-        Customer expectCustomer =  new Customer(1,"user234", "password21", "Jane", "Dane");
+        CustomerRequestDTO expectCustomer =  new CustomerRequestDTO(1,"user234", "password21", "Jane", "Dane");
 
 
         when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
@@ -111,7 +114,7 @@ public class CustomerDTOServiceTest {
 
     @Test
     public void test_replaceCustomer_throwRuntimeException(){
-        Customer expectedCustomer = new Customer();
+        CustomerRequestDTO expectedCustomer = new CustomerRequestDTO();
         when(customerRepository.findById(1)).thenThrow(new RuntimeException("Customer not found"));
 
         assertThrows(RuntimeException.class, () -> {
@@ -126,7 +129,7 @@ public class CustomerDTOServiceTest {
     public void test_updateCustomer_userFound(){
         Customer customer = new Customer(1, "user123", "password12", "John","Doe");
 
-        Customer expectCustomer = new Customer();
+        CustomerRequestDTO expectCustomer = new CustomerRequestDTO();
         expectCustomer.setFirstName("Jane");
         expectCustomer.setLastName("Dane");
         expectCustomer.setUsername("user234");
@@ -145,7 +148,7 @@ public class CustomerDTOServiceTest {
     
     @Test
     public void test_updateCustomer_throwRuntimeException(){
-        Customer expectedCustomer = new Customer();
+        CustomerRequestDTO expectedCustomer = new CustomerRequestDTO();
         when(customerRepository.findById(1)).thenThrow(new RuntimeException("Customer not found"));
 
         assertThrows(RuntimeException.class, () -> {

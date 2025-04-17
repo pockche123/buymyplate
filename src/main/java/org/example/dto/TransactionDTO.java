@@ -18,15 +18,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 public class TransactionDTO {
-    private int transactionId;
+    private Integer transactionId;
     @Positive
     @NotNull
-    private int customerId;
+    private Integer customerId;
     @Positive
     @NotNull
-    private int vehiclePlateId;
+    private Integer vehiclePlateId;
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
-    private double pricePaid;
-    private LocalDate localDate;
+    private Double pricePaid;
+    private LocalDate transactionDate;
 }
