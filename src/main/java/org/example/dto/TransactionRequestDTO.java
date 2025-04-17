@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TransactionDTO {
+public class TransactionRequestDTO {
     private Integer transactionId;
     @Positive
     @NotNull

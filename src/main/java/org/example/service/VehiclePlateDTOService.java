@@ -90,6 +90,12 @@ public class VehiclePlateDTOService {
     public VehiclePlateDTO updateVehiclePlate(int id, VehiclePlateRequestDTO vehiclePlateRequestDTO){
         VehiclePlate actualVehiclePlate = vehiclePlateRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle Plate not found"));
 
+
+        if(vehiclePlateRequestDTO.getCustomerId() != null) {
+            Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElseThrow(() -> new RuntimeException("Customer not found"));
+            actualVehiclePlate.setCustomer(customer);
+        }
+
         if( vehiclePlateRequestDTO.getPrice() != null){
             actualVehiclePlate.setPrice(vehiclePlateRequestDTO.getPrice());
         }
@@ -102,6 +108,8 @@ public class VehiclePlateDTOService {
         if(vehiclePlateRequestDTO.getPlateNumber() != null){
             actualVehiclePlate.setPlateNumber(vehiclePlateRequestDTO.getPlateNumber());
         }
+
+
 
         return convertToVehiclePlateDTO(actualVehiclePlate);
     }
