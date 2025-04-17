@@ -19,14 +19,14 @@ public class TransactionController {
 
     @GetMapping("/v1/transactions")
     public ResponseEntity<Page<TransactionDTO>> getAllTransactions(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(name = "page", defaultValue = "0")int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(transactionDTOService.findAllTransactions(page, size));
     }
 
     @GetMapping("/v1/transactions/{id}")
-    public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable("id") int id) {
+    public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable(name = "id") int id) {
         return ResponseEntity.ok(transactionDTOService.findTransactionDTOById(id));
     }
 
@@ -39,8 +39,8 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionDTO);
     }
 
-    @PutMapping("/v1/transactions")
-    public ResponseEntity<TransactionDTO> replaceTransaction(int id, @RequestBody TransactionRequestDTO transactionRequestDTO) {
+    @PutMapping("/v1/transactions/{id}")
+    public ResponseEntity<TransactionDTO> replaceTransaction(@PathVariable(name="id") int id, @RequestBody TransactionRequestDTO transactionRequestDTO) {
         TransactionDTO transactionDTO = transactionDTOService.replaceTransaction(id, transactionRequestDTO);
         if(transactionDTO == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -48,14 +48,14 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(transactionDTO);
     }
 
-    @PatchMapping("/v1/transactions")
-    public ResponseEntity<TransactionDTO> updateTransaction(int id, @RequestBody TransactionRequestDTO transactionRequestDTO) {
+    @PatchMapping("/v1/transactions/{id}")
+    public ResponseEntity<TransactionDTO> updateTransaction(@PathVariable(name="id") int id, @RequestBody TransactionRequestDTO transactionRequestDTO) {
         TransactionDTO transactionDTO = transactionDTOService.updateTransaction(id, transactionRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(transactionDTO);
     }
 
     @DeleteMapping("/v1/transactions/{id}")
-    public ResponseEntity<TransactionDTO> deleteTransaction(@PathVariable("id") int id) {
+    public ResponseEntity<TransactionDTO> deleteTransaction(@PathVariable(name = "id") int id) {
         boolean result = transactionDTOService.deleteTransaction(id);
         if(!result) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

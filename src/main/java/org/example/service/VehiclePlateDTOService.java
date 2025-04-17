@@ -53,7 +53,7 @@ public class VehiclePlateDTOService {
     }
 
     public VehiclePlateDTO addVehiclePlate(VehiclePlateRequestDTO vehiclePlateRequestDTO) {
-        if(vehiclePlateRequestDTO.getVehicleId() == null || vehiclePlateRequestDTO.getPlateNumber() == null|| vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null || vehiclePlateRequestDTO.getCustomerId() == null) {
+        if( vehiclePlateRequestDTO.getPlateNumber() == null|| vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null || vehiclePlateRequestDTO.getCustomerId() == null) {
             return null;
         }
         Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
@@ -61,7 +61,6 @@ public class VehiclePlateDTOService {
             return null;
         }
         VehiclePlate vehiclePlate = new VehiclePlate();
-        vehiclePlate.setPlateId(vehiclePlateRequestDTO.getVehicleId());
         vehiclePlate.setPlateNumber(vehiclePlateRequestDTO.getPlateNumber());
         vehiclePlate.setPersonalised(vehiclePlateRequestDTO.getPersonalised());
         vehiclePlate.setAvailable(vehiclePlateRequestDTO.getAvailable());
@@ -75,7 +74,7 @@ public class VehiclePlateDTOService {
         VehiclePlate actualVehiclePlate = vehiclePlateRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle Plate not found"));
 
         Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
-        if(customer == null || vehiclePlateRequestDTO.getPlateNumber() == null || vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null || vehiclePlateRequestDTO.getCustomerId() == null || vehiclePlateRequestDTO.getVehicleId() == null) {
+        if(customer == null || vehiclePlateRequestDTO.getPlateNumber() == null || vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null ) {
             return null;
         }
 
@@ -84,6 +83,8 @@ public class VehiclePlateDTOService {
         actualVehiclePlate.setAvailable(vehiclePlateRequestDTO.getAvailable());
         actualVehiclePlate.setCustomer(customer);
         actualVehiclePlate.setPrice(vehiclePlateRequestDTO.getPrice());
+
+        vehiclePlateRepository.save(actualVehiclePlate);
         return convertToVehiclePlateDTO(actualVehiclePlate);
     }
 

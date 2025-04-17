@@ -19,8 +19,9 @@ public class TransactionDTOService {
 
     @Autowired
     private TransactionRepository transactionRepository;
-
+    @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
     private VehiclePlateRepository vehiclePlateRepository;
 
     public static TransactionDTO convertToTransactionDTO(Transaction transaction){
@@ -48,10 +49,9 @@ public class TransactionDTOService {
         Transaction transaction = new Transaction();
         Customer customer = customerRepository.findById(transactionRequestDTO.getCustomerId()).orElse(null);
         VehiclePlate vehiclePlate = vehiclePlateRepository.findById(transactionRequestDTO.getVehiclePlateId()).orElse(null);
-        if(customer == null || vehiclePlate == null || transactionRequestDTO.getTransactionId() == null || transactionRequestDTO.getTransactionDate() == null || transactionRequestDTO.getPricePaid() == null){
+        if(customer == null || vehiclePlate == null  || transactionRequestDTO.getTransactionDate() == null || transactionRequestDTO.getPricePaid() == null){
             return null;
         }
-        transaction.setTransactionId(transactionRequestDTO.getTransactionId());
         transaction.setCustomer(customer);
         transaction.setPlate(vehiclePlate);
         transaction.setTransactionDate(transactionRequestDTO.getTransactionDate());
@@ -65,14 +65,14 @@ public class TransactionDTOService {
         Customer customer = customerRepository.findById(replacedTransaction.getCustomerId()).orElse(null);
         VehiclePlate vehiclePlate = vehiclePlateRepository.findById(replacedTransaction.getVehiclePlateId()).orElse(null);
 
-        if(customer == null || vehiclePlate == null || transaction == null || replacedTransaction.getTransactionId() == null || replacedTransaction.getTransactionDate() == null){
+        if(customer == null || vehiclePlate == null || transaction == null  || replacedTransaction.getTransactionDate() == null){
             return null;
         }
         transaction.setPricePaid(replacedTransaction.getPricePaid());
         transaction.setTransactionDate(replacedTransaction.getTransactionDate());
         transaction.setCustomer(customer);
         transaction.setPlate(vehiclePlate);
-
+        transactionRepository.save(transaction);
         return convertToTransactionDTO(transaction);
     }
 
@@ -96,7 +96,7 @@ public class TransactionDTOService {
             VehiclePlate vehiclePlate = vehiclePlateRepository.findById(updatedTransaction.getVehiclePlateId()).orElseThrow(()->new RuntimeException("VehiclePlate id not found"));
             transaction.setPlate(vehiclePlate);
         }
-
+        transactionRepository.save(transaction);
         return convertToTransactionDTO(transaction);
     }
 

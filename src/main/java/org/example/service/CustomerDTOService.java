@@ -66,7 +66,9 @@ public class CustomerDTOService {
         existingCustomer.setFirstName(customerRequestDTO.getFirstName());
         existingCustomer.setLastName(customerRequestDTO.getLastName());
         existingCustomer.setPassword(customerRequestDTO.getPassword());
-        return convertToCustomerDTO(existingCustomer);
+        Customer savedCustomer = customerRepository.save(existingCustomer);
+
+        return convertToCustomerDTO(savedCustomer);
     }
 
     public CustomerDTO updateCustomer(int id, CustomerRequestDTO customerRequestDTO){
@@ -84,7 +86,9 @@ public class CustomerDTOService {
         if(customerRequestDTO.getPassword() != null){
             existingCustomer.setPassword(customerRequestDTO.getPassword());
         }
-        return convertToCustomerDTO(existingCustomer);
+        Customer savedCustomer = customerRepository.save(existingCustomer);
+
+        return convertToCustomerDTO(savedCustomer);
 
     }
 
