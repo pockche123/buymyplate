@@ -1,0 +1,13 @@
+{
+  "banned_words": [
+    "sex", "boobs", "penis", "vagina", "orgasm", "dildo", "wank", "fanny", "cock", "ass", "twat",
+    "piss", "cunt", "shit", "fuck", "bastard", "bitch", "fag", "paki", "gay", "nazi", "nigg", "kkk", "jewh8",
+    "islamh8", "terror", "kill", "die", "bomb", "gun", "rape", "stab", "war", "kill", "death",
+    "weed", "coke", "meth", "crack", "heroin", "vodka", "blunt", "joint", "dope", "alcohol", "drugs",
+    "loser", "moron", "retard", "spaz", "cripple", "disabled", "ugly", "fat", "dumb", "death",
+    "bastard", "fool", "idiot", "slut", "whore", "hoe", "bimbo", "tramp", "skank", "freak"
+  ],
+  "regex_patterns": [
+    ".*(s+e+x+.*|b+o+o+b+s+.*|p+e+n+i+s+.*|v+a+g+i+n+a+.*|o+r+g+a+s+m+.*|d+i+l+d+o+.*|w+a+n+k+.*|f+a+n+n+y+.*|c+o+c+k+.*|a+s+s+.*|t+w+a+t+.*|p+i+s+s+.*|c+u+n+t+.*|s+h+i+t+.*|f+u+c+k+.*|b+a+s+t+a+r+d+.*|b+i+t+c+h+.*|f+a+g+.*|p+a+k+i+.*|n+i+g+g+.*|k+k+k+.*|j+e+w+h+8+.*|i+s+l+a+m+h+8+.*|t+e+r+r+o+r+.*|k+i+l+l+.*|d+i+e+.*|b+o+m+b+.*|g+u+n+.*|r+a+p+e+.*|s+t+a+b+.*|w+a+r+.*|d+e+a+t+h+.*|w+e+e+d+.*|c+o+k+e+.*|m+e+t+h+.*|c+r+a+c+k+.*|h+e+r+o+i+n+.*|v+o+d+k+a+.*|b+l+u+n+t+.*|j+o+i+n+t+.*|d+o+p+e+.*|a+l+c+o+h+o+l+.*|d+r+u+g+s+.*|l+o+s+e+r+.*|m+o+r+o+n+.*|r+e+t+a+r+d+.*|s+p+a+z+.*|c+r+i+p+p+l+e+.*|d+i+s+a+b+l+e+d+.*|u+g+l+y+.*|f+a+t+.*|d+u+m+b+.*|d+e+a+t+h+.*|b+a+s+t+a+r+d+.*|f+o+o+l+.*|i+d+i+o+t+.*|s+l+u+t+.*|w+h+o+r+e+.*|h+o+e+.*|b+i+m+b+o+.*|t+r+a+m+p+.*|s+k+a+n+k+.*|f+r+e+a+k+.*)"
+  ]
+}
