@@ -1,10 +1,7 @@
 package org.example.model;
 
 
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +21,7 @@ public abstract class User {
     private String password;
     private String firstName;
     private String lastName;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
 }
