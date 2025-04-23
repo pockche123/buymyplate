@@ -18,7 +18,7 @@ public class PlateValidatorTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        plateValidator = new PlateValidator("/banned_words.json");
+        plateValidator = new PlateValidator();
     }
 
     @Test
@@ -53,7 +53,39 @@ public class PlateValidatorTest {
 
     }
 
-
+//    @Test
+//    public void test_checkRegexMatch(){
+//        String reg1 = "BO0OBS1";
+//        String reg2 = "T3RR0R";
+//        String reg3 = "CR4CKX";
+//        String reg4 = "N1GG4R";
+//        String reg5 = "AB23 UYI";
+//        String reg6 = "ALI1";
+//        String test7 = "A123BCD";
+//
+//
+//
+//        boolean actual1 = plateValidator.checkRegexMatch(reg1);
+//        boolean actual2 = plateValidator.checkRegexMatch(reg2);
+//        boolean actual3 = plateValidator.checkRegexMatch(reg3);
+//        boolean actual4 = plateValidator.checkRegexMatch(reg4);
+//        boolean actual5 = plateValidator.checkRegexMatch(reg5);
+//        boolean actual6 = plateValidator.checkRegexMatch(reg6);
+//        boolean actual7 = plateValidator.checkRegexMatch(test7);
+//
+//
+//        assertTrue(actual1);
+//        assertTrue(actual2);
+//        assertTrue(actual3);
+//        assertTrue(actual4);
+//
+//        assertFalse(actual5);
+//        assertFalse(actual6);
+//        assertFalse(actual7);
+//
+//    }
+//
+//
 
 
 }

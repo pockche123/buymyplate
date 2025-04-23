@@ -2,13 +2,14 @@ package org.example.validator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+@Component
 public class PlateValidator {
 
     public static class BannedWordsData {
@@ -18,30 +19,37 @@ public class PlateValidator {
         public List<String> regexPatterns;
     }
 
-    private List<String> bannedWords;
-    private List<String> regexPatterns;
+    private final List<String> bannedWords;
+    private final List<String> regexPatterns;
 
-    public PlateValidator(String path) throws IOException {
+    public PlateValidator() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        InputStream is = getClass().getResourceAsStream(path);
-        if(is == null){
-            throw new FileNotFoundException("Resource not found: " + path);
-        }
-        BannedWordsData bannedWordsData = objectMapper.readValue(is,BannedWordsData.class);
-        this.bannedWords = bannedWordsData.bannedWords;
-        this.regexPatterns = bannedWordsData.regexPatterns;
+        InputStream is = new ClassPathResource("banned_words.json").getInputStream();
 
-
+        BannedWordsData data = objectMapper.readValue(is, BannedWordsData.class);
+        this.bannedWords = data.bannedWords;
+        this.regexPatterns = data.regexPatterns;
     }
 
-    public String normalisePlate(String input){
+    public String normalisePlate(String input) {
         return input.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
     }
 
-    public boolean checkContainsBannedWords(String input){
-        String normalisedInput = normalisePlate(input);
-        for(String bannedWord : bannedWords){
-            if(normalisedInput.contains(bannedWord)) {
+    public boolean checkContainsBannedWords(String input) {
+        String normalized = normalisePlate(input);
+        for (String banned : bannedWords) {
+            if (normalized.contains(banned)) {
+                System.out.println("matched with word: " + banned);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkRegexMatch(String input) {
+        for (String regex : regexPatterns) {
+            if (!input.matches(regex)) {
+                System.out.println("matched with regex: " + regex);
                 return true;
             }
         }

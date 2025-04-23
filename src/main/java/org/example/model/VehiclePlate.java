@@ -1,6 +1,7 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,12 +25,17 @@ public class VehiclePlate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int plateId;
     @Column(nullable=false, unique=true)
+    @Size(
+            min = 2,
+            max = 8,
+            message = "UK plate must be between 5 and 8 characters, e.g. AB12 CDE"
+    )
     private String plateNumber;
     private Boolean personalised;
     private Boolean available;
 
     private double price;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = true)
     private Customer customer;
 

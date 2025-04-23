@@ -1,11 +1,10 @@
 package org.example.model;
 
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.management.relation.Role;
+
 
 
 @Entity
