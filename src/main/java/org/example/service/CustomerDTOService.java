@@ -49,11 +49,11 @@ public class CustomerDTOService {
             return null;
         }
         Customer customer = new Customer();
-        customer.setId(customerRequestDTO.getCustomerId());
         customer.setFirstName(customerRequestDTO.getFirstName());
         customer.setLastName(customerRequestDTO.getLastName());
         customer.setUsername(customerRequestDTO.getUsername());
         customer.setPassword(customerRequestDTO.getPassword());
+//        customer.setRole(UserRole.CUSTOMER);
         customerRepository.save(customer);
         return convertToCustomerDTO(customer);
     }

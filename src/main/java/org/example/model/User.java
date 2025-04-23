@@ -19,6 +19,7 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Size(min = 3, max = 50, message = "Username must be 3–50 characters")
+    @Column(nullable=false, unique=true)
     private String username;
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
@@ -26,5 +27,7 @@ public abstract class User {
     private String lastName;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+
 
 }
