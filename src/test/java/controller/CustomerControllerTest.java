@@ -3,6 +3,7 @@ package controller;
 import org.example.controller.CustomerController;
 import org.example.dto.CustomerDTO;
 import org.example.dto.CustomerRequestDTO;
+import org.example.model.UserRole;
 import org.example.service.CustomerDTOService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,8 +38,8 @@ public class CustomerControllerTest {
     public void test_getAllCustomers(){
 
         List<CustomerDTO> customerList = Arrays.asList(
-                new CustomerDTO(1, "user123", "password12", "John","Doe"),
-                new CustomerDTO(2,"user234", "password21", "Jane", "Doe")
+                new CustomerDTO(1, "user123", "password12", "John","Doe", UserRole.CUSTOMER),
+                new CustomerDTO(2,"user234", "password21", "Jane", "Doe", UserRole.CUSTOMER)
         );
         Page<CustomerDTO> expectedPage = new PageImpl<>(customerList);
 
@@ -54,7 +55,7 @@ public class CustomerControllerTest {
 
     @Test
     public void test_getCustomerById(){
-        CustomerDTO customerDTO = new CustomerDTO(1, "user123", "password12", "John","Doe");
+        CustomerDTO customerDTO = new CustomerDTO(1, "user123", "password12", "John","Doe", UserRole.CUSTOMER);
         when(customerDTOService.findCustomerById(1)).thenReturn(customerDTO);
 
         ResponseEntity<CustomerDTO> expectedCustomer = customerController.getCustomerById(1);
@@ -66,7 +67,7 @@ public class CustomerControllerTest {
     @Test
     public void test_addCustomer_returnsCreatedStatus(){
         CustomerRequestDTO customer = new CustomerRequestDTO(1, "user123", "password12", "John","Doe");
-        CustomerDTO customerDTO = new CustomerDTO(1, "user123", "password12", "John", "Doe");
+        CustomerDTO customerDTO = new CustomerDTO(1, "user123", "password12", "John", "Doe", UserRole.CUSTOMER);
         when(customerDTOService.addCustomer(customer)).thenReturn(customerDTO);
 
         ResponseEntity<CustomerDTO> expected = customerController.createCustomer(customer);
@@ -90,7 +91,7 @@ public class CustomerControllerTest {
     public void test_replaceCustomer_returnsCreatedStatus() {
         CustomerRequestDTO customerRequestDTO = new CustomerRequestDTO(1, "user123", "password12", "John", "Doe");
 
-        CustomerDTO customerDTO = new CustomerDTO(1, "usr231", "password21", "Jane", "Dane");
+        CustomerDTO customerDTO = new CustomerDTO(1, "usr231", "password21", "Jane", "Dane", UserRole.CUSTOMER);
 
         when(customerDTOService.replaceCustomer(1, customerRequestDTO)).thenReturn(customerDTO);
 
@@ -119,7 +120,7 @@ public class CustomerControllerTest {
         CustomerRequestDTO customerRequestDTO = new CustomerRequestDTO();
 
 
-        CustomerDTO customerDTO = new CustomerDTO(1, "user123", "password12", "John", "Doe");
+        CustomerDTO customerDTO = new CustomerDTO(1, "user123", "password12", "John", "Doe", UserRole.CUSTOMER);
         when(customerDTOService.updateCustomer(1, customerRequestDTO)).thenReturn(customerDTO);
 
         ResponseEntity<CustomerDTO> actual = customerController.updateCustomer(1, customerRequestDTO);

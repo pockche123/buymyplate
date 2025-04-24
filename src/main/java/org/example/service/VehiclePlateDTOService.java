@@ -129,4 +129,8 @@ public class VehiclePlateDTOService {
                 }).orElse(false);
     }
 
+    public Page<VehiclePlateDTO> findVehiclePlatesByCustomerId(int customerId, Pageable pageable) {
+        return vehiclePlateRepository.findVehiclePlatesByCustomerId(customerId, pageable).map(VehiclePlateDTOService::convertToVehiclePlateDTO);
+    }
+
 }
