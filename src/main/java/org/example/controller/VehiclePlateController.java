@@ -6,6 +6,8 @@ import org.example.service.VehiclePlateDTOService;
 import org.example.validator.PlateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,5 +86,14 @@ public class VehiclePlateController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/v1/vehiclePlates/customerId/{id}")
+    public ResponseEntity<Page<VehiclePlateDTO>> getAllVehiclePlatesByCustomerId(@PathVariable(name="id") int id,
+                                                                                 @RequestParam(name = "page", defaultValue = "0")int page,
+                                                                                 @RequestParam(name = "size", defaultValue = "10") int size)
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VehiclePlateDTO> result = vehiclePlateDTOService.findVehiclePlatesByCustomerId(id, pageable);
+        return ResponseEntity.ok(result);
+    }
 
 }

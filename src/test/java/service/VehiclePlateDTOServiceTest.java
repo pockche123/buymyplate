@@ -207,4 +207,23 @@ public class VehiclePlateDTOServiceTest {
         assertFalse(resultFalse);
     }
 
+    @Test
+    public void test_vehiclePlatesBydId_returnList(){
+        List<VehiclePlate> vehiclePlates = Arrays.asList(
+                new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer()),
+                new VehiclePlate(2,"su88 4ky", true,true,50.50, new Customer())
+
+        );
+
+        Page<VehiclePlate> expectedPage = new PageImpl<>(vehiclePlates);
+        Pageable pageable = PageRequest.of(0, 10);
+        when(vehiclePlateRepository.findVehiclePlatesByCustomerId(1, pageable)).thenReturn(expectedPage);
+
+        Page<VehiclePlateDTO> actualPage = vehiclePlateDTOService.findVehiclePlatesByCustomerId(1, pageable);
+
+        assertNotNull(actualPage);
+        assertEquals(expectedPage.getTotalElements(), actualPage.getTotalElements());
+        assertEquals(expectedPage.getTotalPages(), actualPage.getTotalPages());
+    }
+
 }

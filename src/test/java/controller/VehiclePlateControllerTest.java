@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -147,5 +149,25 @@ public class VehiclePlateControllerTest {
         assertNotNull(result);
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
         assertEquals(HttpStatus.NOT_FOUND, resultFalse.getStatusCode());
+    }
+
+    @Test
+    public void test_getAllVehiclePlatesByCustomerId(){
+        List<VehiclePlateDTO> vehiclePlateDTOList = Arrays.asList(
+                new VehiclePlateDTO(1, "sa12uvw", false, false, 20.30, 1),
+                new VehiclePlateDTO(2, "sa56xrw", false, false, 60.30, 1)
+        );
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<VehiclePlateDTO> expectedPage = new PageImpl<>(vehiclePlateDTOList);
+
+        when(vehiclePlateDTOService.findVehiclePlatesByCustomerId(1, pageable)).thenReturn(expectedPage);
+
+
+        ResponseEntity<Page<VehiclePlateDTO>> result= vehiclePlateController.getAllVehiclePlatesByCustomerId(1, 0, 10);
+
+        assertNotNull(result);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(expectedPage, result.getBody());
+
     }
 }
