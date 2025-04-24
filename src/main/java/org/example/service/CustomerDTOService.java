@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.dto.CustomerDTO;
 import org.example.dto.CustomerRequestDTO;
 import org.example.model.Customer;
+import org.example.model.UserRole;
 import org.example.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,8 @@ public class CustomerDTOService {
         customerDTO.setPassword(customer.getPassword());
         customerDTO.setFirstName(customer.getFirstName());
         customerDTO.setLastName(customer.getLastName());
+        System.out.println("this is the role:"  + customer.getRole());
+        customerDTO.setRole(UserRole.CUSTOMER);
 
         return customerDTO;
     }
@@ -46,11 +49,11 @@ public class CustomerDTOService {
             return null;
         }
         Customer customer = new Customer();
-        customer.setId(customerRequestDTO.getCustomerId());
         customer.setFirstName(customerRequestDTO.getFirstName());
         customer.setLastName(customerRequestDTO.getLastName());
         customer.setUsername(customerRequestDTO.getUsername());
         customer.setPassword(customerRequestDTO.getPassword());
+//        customer.setRole(UserRole.CUSTOMER);
         customerRepository.save(customer);
         return convertToCustomerDTO(customer);
     }

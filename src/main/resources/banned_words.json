@@ -1,0 +1,18 @@
+{
+  "banned_words": [
+    "sex", "boobs", "penis", "vagina", "orgasm", "dildo", "wank", "fanny", "cock", "ass", "twat",
+    "piss", "cunt", "shit", "fuck", "bastard", "bitch", "fag", "paki", "gay", "nazi", "nigg", "kkk", "jewh8",
+    "islamh8", "terror", "kill", "die", "bomb", "gun", "rape", "stab", "war", "kill", "death",
+    "weed", "coke", "meth", "crack", "heroin", "vodka", "blunt", "joint", "dope", "alcohol", "drugs",
+    "loser", "moron", "retard", "spaz", "cripple", "disabled", "ugly", "fat", "dumb", "death",
+    "bastard", "fool", "oidiot", "slut", "whore", "hoe", "bimbo", "tramp", "skank", "freak"
+  ],
+  "regex_patterns": [
+    ".*s.*e.*3.*x.*",
+    ".*b.*o.*[0-9]*.*o.*b.*s.*",
+    ".*t.*3.*r.*0.*r.*",
+    ".*c.*r.*[0-9]*.*c.*k.*",
+    ".*n.*1.*g.*[0-9]*.*r.*"
+  ]
+
+}

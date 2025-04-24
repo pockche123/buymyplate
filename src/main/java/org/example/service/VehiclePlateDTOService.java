@@ -53,13 +53,15 @@ public class VehiclePlateDTOService {
     }
 
     public VehiclePlateDTO addVehiclePlate(VehiclePlateRequestDTO vehiclePlateRequestDTO) {
-        if( vehiclePlateRequestDTO.getPlateNumber() == null|| vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null || vehiclePlateRequestDTO.getCustomerId() == null) {
+        if( vehiclePlateRequestDTO.getPlateNumber() == null|| vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null ) {
             return null;
         }
-        Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
-        if(customer == null) {
-            return null;
+//        Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
+        Customer customer = null;
+        if (vehiclePlateRequestDTO.getCustomerId() != null) {
+            customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
         }
+
         VehiclePlate vehiclePlate = new VehiclePlate();
         vehiclePlate.setPlateNumber(vehiclePlateRequestDTO.getPlateNumber());
         vehiclePlate.setPersonalised(vehiclePlateRequestDTO.getPersonalised());
@@ -73,9 +75,13 @@ public class VehiclePlateDTOService {
     public VehiclePlateDTO replaceVehiclePlate(int id, VehiclePlateRequestDTO vehiclePlateRequestDTO) {
         VehiclePlate actualVehiclePlate = vehiclePlateRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle Plate not found"));
 
-        Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
-        if(customer == null || vehiclePlateRequestDTO.getPlateNumber() == null || vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null ) {
+        if(vehiclePlateRequestDTO.getPlateNumber() == null || vehiclePlateRequestDTO.getPersonalised() == null || vehiclePlateRequestDTO.getAvailable() == null || vehiclePlateRequestDTO.getPrice() == null ) {
             return null;
+        }
+
+        Customer customer = null;
+        if (vehiclePlateRequestDTO.getCustomerId() != null) {
+            customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
         }
 
         actualVehiclePlate.setPlateNumber(vehiclePlateRequestDTO.getPlateNumber());
@@ -93,7 +99,7 @@ public class VehiclePlateDTOService {
 
 
         if(vehiclePlateRequestDTO.getCustomerId() != null) {
-            Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElseThrow(() -> new RuntimeException("Customer not found"));
+            Customer customer = customerRepository.findById(vehiclePlateRequestDTO.getCustomerId()).orElse(null);
             actualVehiclePlate.setCustomer(customer);
         }
 
@@ -110,7 +116,7 @@ public class VehiclePlateDTOService {
             actualVehiclePlate.setPlateNumber(vehiclePlateRequestDTO.getPlateNumber());
         }
 
-
+        vehiclePlateRepository.save(actualVehiclePlate);
 
         return convertToVehiclePlateDTO(actualVehiclePlate);
     }

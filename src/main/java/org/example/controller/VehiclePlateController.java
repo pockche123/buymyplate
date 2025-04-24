@@ -3,17 +3,27 @@ package org.example.controller;
 import org.example.dto.VehiclePlateDTO;
 import org.example.dto.VehiclePlateRequestDTO;
 import org.example.service.VehiclePlateDTOService;
+import org.example.validator.PlateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class VehiclePlateController {
+    VehiclePlateDTOService vehiclePlateDTOService;
+    PlateValidator plateValidator;
 
     @Autowired
-    private VehiclePlateDTOService vehiclePlateDTOService;
+    public VehiclePlateController(VehiclePlateDTOService service, PlateValidator validator) {
+        this.vehiclePlateDTOService = service;
+        this.plateValidator = validator;
+    }
+
 
     @GetMapping("/v1/vehiclePlates")
     public ResponseEntity<Page<VehiclePlateDTO>> getAllVehiclePlates(
@@ -40,6 +50,9 @@ public class VehiclePlateController {
 
     @PostMapping("/v1/vehiclePlates")
     public ResponseEntity<VehiclePlateDTO> createVehiclePlate(@RequestBody VehiclePlateRequestDTO vehiclePlateRequestDTO) {
+        if(plateValidator.checkContainsBannedWords(vehiclePlateRequestDTO.getPlateNumber())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new VehiclePlateDTO());
+        }
         VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO);
         if(vehiclePlateDTO == null) {
             return ResponseEntity.badRequest().build();
