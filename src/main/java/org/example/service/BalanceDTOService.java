@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.BalanceDTO;
+import org.example.dto.BalanceRequestDTO;
 import org.example.model.Balance;
 import org.example.repository.BalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +25,19 @@ public class BalanceDTOService {
         return balanceRepository.findById(id).map(BalanceDTOService::convertToDTO).orElse(null);
     }
 
+    public BalanceDTO findByCustomerId(int customerId){
+        Balance balance =  balanceRepository.findByCustomer_Id(customerId);
+        return convertToDTO(balance);
+    }
+
+    public BalanceDTO updateBalance(int balanceId, BalanceRequestDTO balanceRequestDTO){
+        Balance balance = balanceRepository.findById(balanceId).orElseThrow(() -> new RuntimeException("Balance not found"));
+
+        if(balance.getAmount() != balanceRequestDTO.getAmount()){
+            balance.setAmount(balanceRequestDTO.getAmount());
+        }
+
+        balanceRepository.save(balance);
+        return convertToDTO(balance);
+    }
 }

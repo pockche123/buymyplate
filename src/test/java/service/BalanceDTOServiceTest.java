@@ -1,6 +1,7 @@
 package service;
 
 import org.example.dto.BalanceDTO;
+import org.example.dto.BalanceRequestDTO;
 import org.example.model.Balance;
 import org.example.model.Customer;
 import org.example.repository.BalanceRepository;
@@ -26,7 +27,7 @@ public class BalanceDTOServiceTest {
     BalanceRepository balanceRepository;
 
     @Test
-    public void  test_findBalanceRepositoryById(){
+    public void  test_findBalanceById(){
         Customer customer = new Customer();
         Balance balance = new Balance(1, 200, customer);
         BalanceDTO balanceDTO = new BalanceDTO(1, 200, 1);
@@ -36,6 +37,19 @@ public class BalanceDTOServiceTest {
 
         assertNotNull(actual);
         assertEquals(200, balanceDTO.getAmount());
+    }
+
+    @Test
+    public void test_updateBalance(){
+        Balance balance= new Balance(1, 200, new Customer());
+        BalanceRequestDTO balanceRequestDTO = new BalanceRequestDTO();
+        balanceRequestDTO.setAmount(300);
+        when(balanceRepository.findById(1)).thenReturn(Optional.of(balance));
+
+        BalanceDTO balanceDTO = balanceDTOService.updateBalance(1, balanceRequestDTO);
+
+        assertNotNull(balanceDTO);
+        assertEquals(300, balanceDTO.getAmount());
     }
 
 
