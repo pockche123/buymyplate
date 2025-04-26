@@ -1,18 +1,17 @@
-//package org.example.security;
-//
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.core.convert.converter.Converter;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.security.authentication.AbstractAuthenticationToken;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.oauth2.jwt.Jwt;
-//import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-//import org.springframework.security.web.SecurityFilterChain;
+package org.example.security;
+
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+import org.springframework.security.web.SecurityFilterChain;
 //
 //import java.util.*;
 //import java.util.stream.Collectors;
@@ -40,6 +39,8 @@
 //                        .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.PATCH, "/**").hasAnyRole("CUSTOMER", "ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+//                            .requestMatchers(HttpMethod.GET, "/api/user/info").authenticated()
+//                            .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
 //                        .anyRequest().authenticated()
 //        );
 //
@@ -88,4 +89,46 @@
 //        return http.build();
 //    }
 //}
+
+
+
+
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .csrf(csrf ->
+                        csrf.disable()
+                )
+                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(requests ->
+                        requests
+                                .requestMatchers("/v1/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/v1/vehiclePlates").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/v1/vehiclePlates/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/v1/vehiclePlates/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                                .anyRequest().permitAll()
+                );
+
+        return http.build();
+    }
+
+    @Bean
+    public JwtAuthFilter jwtAuthFilter() {
+        return new JwtAuthFilter();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
 
