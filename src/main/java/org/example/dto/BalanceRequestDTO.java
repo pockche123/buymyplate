@@ -10,5 +10,5 @@ import lombok.*;
 public class BalanceRequestDTO {
     private int balanceId;
     private double amount;
-    private int customerId;
+    private int userId;
 }

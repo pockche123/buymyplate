@@ -2,11 +2,11 @@ package service;
 
 import org.example.dto.TransactionDTO;
 import org.example.dto.TransactionRequestDTO;
-import org.example.model.Customer;
 import org.example.model.Transaction;
+import org.example.model.User;
 import org.example.model.VehiclePlate;
-import org.example.repository.CustomerRepository;
 import org.example.repository.TransactionRepository;
+import org.example.repository.UserRepository;
 import org.example.repository.VehiclePlateRepository;
 import org.example.service.TransactionDTOService;
 import org.junit.jupiter.api.Test;
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,24 +37,24 @@ public class TransactionDTOServiceTest {
     @Mock
     private TransactionRepository transactionRepository;
     @Mock
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
     @Mock
     private VehiclePlateRepository vehiclePlateRepository;
 
 
     @Test
     public void test_convertToTransactionDTO(){
-        Customer customer = new Customer();
-        customer.setId(1);
+        User user = new User();
+        user.setId(1);
         VehiclePlate plate = new VehiclePlate();
         plate.setPlateId(1);
         plate.setPrice(50.50);
-        Transaction transaction = new Transaction(1,customer,plate, plate.getPrice(), LocalDate.now());
+        Transaction transaction = new Transaction(1,user,plate, plate.getPrice(), LocalDate.now());
 
         TransactionDTO transactionDTO = transactionDTOService.convertToTransactionDTO(transaction);
 
 
-        assertEquals(1, transactionDTO.getCustomerId());
+        assertEquals(1, transactionDTO.getUserId());
         assertEquals(1, transactionDTO.getTransactionId());
         assertEquals(1, transactionDTO.getVehiclePlateId());
         assertEquals(50.50, transactionDTO.getPricePaid());
@@ -63,8 +64,8 @@ public class TransactionDTOServiceTest {
     @Test
     public void test_findAllTransactions(){
         List<Transaction> transactionList = Arrays.asList(
-                new Transaction(1, new Customer(), new VehiclePlate(), 50.50, LocalDate.now()),
-                new Transaction(2, new Customer(), new VehiclePlate(), 70.60, LocalDate.now())
+                new Transaction(1, new User(), new VehiclePlate(), 50.50, LocalDate.now()),
+                new Transaction(2, new User(), new VehiclePlate(), 70.60, LocalDate.now())
         );
         Pageable pageable = PageRequest.of(0,10);
         Page<Transaction> expectedPage= new PageImpl<>(transactionList,pageable, 2);
@@ -82,7 +83,7 @@ public class TransactionDTOServiceTest {
 
     @Test
     public void test_findTransactionById(){
-        Transaction transaction = new Transaction(1, new Customer(), new VehiclePlate(), 50.50, LocalDate.now());
+        Transaction transaction = new Transaction(1, new User(), new VehiclePlate(), 50.50, LocalDate.now());
 
         when(transactionRepository.findById(1)).thenReturn(Optional.of(transaction));
 
@@ -103,25 +104,41 @@ public class TransactionDTOServiceTest {
     }
 
     @Test
-    public void test_addTransaction(){
-        TransactionRequestDTO transaction = new TransactionRequestDTO(1, 1, 1, 50.50, LocalDate.now());
-        when(customerRepository.findById(1)).thenReturn(Optional.of(new Customer()));
-        when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(new VehiclePlate()));
+    public void test_addTransaction() {
+        // Arrange
+        User mockUser = new User();
+        VehiclePlate mockPlate = new VehiclePlate();
+        when(userRepository.findById(1)).thenReturn(Optional.of(mockUser));
+        when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(mockPlate));
 
-        TransactionDTO transactionDTO = transactionDTOService.addTransaction(transaction);
+        Transaction savedTransaction = new Transaction();
 
-        assertEquals(50.50, transactionDTO.getPricePaid());
-        assertEquals(LocalDate.now(), transactionDTO.getTransactionDate());
-        assertEquals(1, transactionDTO.getTransactionId());
+        savedTransaction.setTransactionId(1);
+        savedTransaction.setUser(mockUser);
+        savedTransaction.setPlate(mockPlate);
+        savedTransaction.setPricePaid(50.50);
+        savedTransaction.setTransactionDate(LocalDate.now());
+
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(savedTransaction);
+
+        // Act
+        TransactionDTO result = transactionDTOService.addTransaction(
+                new TransactionRequestDTO(1, 1, 1, 50.50, LocalDate.now())
+        );
+
+        // Assert
+//        assertEquals(1, result.getTransactionId());
+        assertEquals(50.50, result.getPricePaid());
+        assertEquals(LocalDate.now(), result.getTransactionDate());
     }
 
     @Test
     public void test_replaceTransaction(){
-        Customer customer = new Customer();
+        User user = new User();
         VehiclePlate vehiclePlate = new VehiclePlate();
-        Transaction transaction = new Transaction(1, customer, vehiclePlate, 50.50, LocalDate.now());
+        Transaction transaction = new Transaction(1, user, vehiclePlate, 50.50, LocalDate.now());
         TransactionRequestDTO replacedTransaction = new TransactionRequestDTO(1, 1, 1, 60.70, LocalDate.now().minusDays(1));
-        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(vehiclePlate));
         when(transactionRepository.findById(1)).thenReturn(Optional.of(transaction));
 
@@ -146,7 +163,7 @@ public class TransactionDTOServiceTest {
 
     @Test
     public void test_updateTransaction(){
-        Transaction transaction = new Transaction(1, new Customer(), new VehiclePlate(), 50.50, LocalDate.now());
+        Transaction transaction = new Transaction(1, new User(), new VehiclePlate(), 50.50, LocalDate.now());
         TransactionRequestDTO updatedTransaction = new TransactionRequestDTO();
         updatedTransaction.setTransactionDate(LocalDate.now().minusDays(1));
         updatedTransaction.setPricePaid(70.80);

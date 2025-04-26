@@ -4,6 +4,7 @@ import org.example.controller.VehiclePlateController;
 import org.example.dto.VehiclePlateDTO;
 import org.example.dto.VehiclePlateRequestDTO;
 import org.example.service.VehiclePlateDTOService;
+import org.example.validator.PlateValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,8 @@ public class VehiclePlateControllerTest {
     private VehiclePlateController vehiclePlateController;
     @Mock
     private VehiclePlateDTOService vehiclePlateDTOService;
+    @Mock
+    private PlateValidator plateValidator;
 
     @Test
     public void test_getAllVehiclePlates() {
@@ -152,7 +155,7 @@ public class VehiclePlateControllerTest {
     }
 
     @Test
-    public void test_getAllVehiclePlatesByCustomerId(){
+    public void test_getAllVehiclePlatesByUserId(){
         List<VehiclePlateDTO> vehiclePlateDTOList = Arrays.asList(
                 new VehiclePlateDTO(1, "sa12uvw", false, false, 20.30, 1),
                 new VehiclePlateDTO(2, "sa56xrw", false, false, 60.30, 1)
@@ -160,10 +163,10 @@ public class VehiclePlateControllerTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<VehiclePlateDTO> expectedPage = new PageImpl<>(vehiclePlateDTOList);
 
-        when(vehiclePlateDTOService.findVehiclePlatesByCustomerId(1, pageable)).thenReturn(expectedPage);
+        when(vehiclePlateDTOService.findVehiclePlatesByUserId(1, pageable)).thenReturn(expectedPage);
 
 
-        ResponseEntity<Page<VehiclePlateDTO>> result= vehiclePlateController.getAllVehiclePlatesByCustomerId(1, 0, 10);
+        ResponseEntity<Page<VehiclePlateDTO>> result= vehiclePlateController.getAllVehiclePlatesByUserId(1, 0, 10);
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());

@@ -3,7 +3,7 @@ package service;
 import org.example.dto.BalanceDTO;
 import org.example.dto.BalanceRequestDTO;
 import org.example.model.Balance;
-import org.example.model.Customer;
+import org.example.model.User;
 import org.example.repository.BalanceRepository;
 import org.example.service.BalanceDTOService;
 import org.junit.jupiter.api.Test;
@@ -28,8 +28,8 @@ public class BalanceDTOServiceTest {
 
     @Test
     public void  test_findBalanceById(){
-        Customer customer = new Customer();
-        Balance balance = new Balance(1, 200, customer);
+        User user = new User();
+        Balance balance = new Balance(1, 200, user);
         BalanceDTO balanceDTO = new BalanceDTO(1, 200, 1);
         when(balanceRepository.findById(1)).thenReturn(Optional.of(balance));
 
@@ -41,7 +41,7 @@ public class BalanceDTOServiceTest {
 
     @Test
     public void test_updateBalance(){
-        Balance balance= new Balance(1, 200, new Customer());
+        Balance balance= new Balance(1, 200, new User());
         BalanceRequestDTO balanceRequestDTO = new BalanceRequestDTO();
         balanceRequestDTO.setAmount(300);
         when(balanceRepository.findById(1)).thenReturn(Optional.of(balance));

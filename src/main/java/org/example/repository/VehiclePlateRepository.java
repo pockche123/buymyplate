@@ -15,6 +15,6 @@ public interface VehiclePlateRepository extends JpaRepository<VehiclePlate, Inte
     @Query("SELECT v from VehiclePlate v WHERE lower(v.plateNumber) LIKE lower(CONCAT(:plate, '%'))")
     Page<VehiclePlate> searchByPartialPlate(@Param("plate") String plate, Pageable pageable );
 
-    Page<VehiclePlate> findVehiclePlatesByCustomerId(Integer customerId, Pageable pageable);
+    Page<VehiclePlate> findVehiclePlatesByUserId(Integer userId, Pageable pageable);
 
 }

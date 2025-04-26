@@ -11,5 +11,5 @@ public class BalanceDTO {
 
     private int balanceId;
     private double amount;
-    private int customerId;
+    private int userId;
 }

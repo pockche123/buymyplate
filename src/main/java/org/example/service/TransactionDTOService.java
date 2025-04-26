@@ -2,11 +2,11 @@ package org.example.service;
 
 import org.example.dto.TransactionDTO;
 import org.example.dto.TransactionRequestDTO;
-import org.example.model.Customer;
 import org.example.model.Transaction;
+import org.example.model.User;
 import org.example.model.VehiclePlate;
-import org.example.repository.CustomerRepository;
 import org.example.repository.TransactionRepository;
+import org.example.repository.UserRepository;
 import org.example.repository.VehiclePlateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,14 +20,14 @@ public class TransactionDTOService {
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
     @Autowired
     private VehiclePlateRepository vehiclePlateRepository;
 
     public static TransactionDTO convertToTransactionDTO(Transaction transaction){
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setTransactionId(transaction.getTransactionId());
-        transactionDTO.setCustomerId(transaction.getCustomer().getId());
+        transactionDTO.setUserId(transaction.getUser().getId());
         transactionDTO.setVehiclePlateId(transaction.getPlate().getPlateId());
         transactionDTO.setTransactionDate(transaction.getTransactionDate());
         transactionDTO.setPricePaid(transaction.getPricePaid());
@@ -47,12 +47,12 @@ public class TransactionDTOService {
 
     public TransactionDTO addTransaction(TransactionRequestDTO transactionRequestDTO){
         Transaction transaction = new Transaction();
-        Customer customer = customerRepository.findById(transactionRequestDTO.getCustomerId()).orElse(null);
+        User user = userRepository.findById(transactionRequestDTO.getUserId()).orElse(null);
         VehiclePlate vehiclePlate = vehiclePlateRepository.findById(transactionRequestDTO.getVehiclePlateId()).orElse(null);
-        if(customer == null || vehiclePlate == null  || transactionRequestDTO.getTransactionDate() == null || transactionRequestDTO.getPricePaid() == null){
+        if(user == null || vehiclePlate == null  || transactionRequestDTO.getTransactionDate() == null || transactionRequestDTO.getPricePaid() == null){
             return null;
         }
-        transaction.setCustomer(customer);
+        transaction.setUser(user);
         transaction.setPlate(vehiclePlate);
         transaction.setTransactionDate(transactionRequestDTO.getTransactionDate());
         transaction.setPricePaid(transactionRequestDTO.getPricePaid());
@@ -62,15 +62,15 @@ public class TransactionDTOService {
 
     public TransactionDTO replaceTransaction(int id, TransactionRequestDTO replacedTransaction){
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction id not found"));
-        Customer customer = customerRepository.findById(replacedTransaction.getCustomerId()).orElse(null);
+        User user = userRepository.findById(replacedTransaction.getUserId()).orElse(null);
         VehiclePlate vehiclePlate = vehiclePlateRepository.findById(replacedTransaction.getVehiclePlateId()).orElse(null);
 
-        if(customer == null || vehiclePlate == null || transaction == null  || replacedTransaction.getTransactionDate() == null){
+        if(user == null || vehiclePlate == null || transaction == null  || replacedTransaction.getTransactionDate() == null){
             return null;
         }
         transaction.setPricePaid(replacedTransaction.getPricePaid());
         transaction.setTransactionDate(replacedTransaction.getTransactionDate());
-        transaction.setCustomer(customer);
+        transaction.setUser(user);
         transaction.setPlate(vehiclePlate);
         transactionRepository.save(transaction);
         return convertToTransactionDTO(transaction);
@@ -87,9 +87,9 @@ public class TransactionDTOService {
             transaction.setTransactionDate(updatedTransaction.getTransactionDate());
         }
 
-        if(updatedTransaction.getCustomerId() != null) {
-            Customer customer = customerRepository.findById(updatedTransaction.getCustomerId()).orElseThrow(()->new RuntimeException("Customer id not found"));
-            transaction.setCustomer(customer);
+        if(updatedTransaction.getUserId() != null) {
+            User user = userRepository.findById(updatedTransaction.getUserId()).orElseThrow(()->new RuntimeException("User id not found"));
+            transaction.setUser(user);
         }
 
         if(updatedTransaction.getVehiclePlateId() != null) {
