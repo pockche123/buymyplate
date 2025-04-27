@@ -14,6 +14,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,6 +27,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http, Converter<Jwt, AbstractAuthenticationToken> authenticationConverter) throws Exception {
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
         http.oauth2ResourceServer(resourceServer ->
                 resourceServer.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter))
         );
@@ -35,14 +40,15 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(requests ->
-                requests
+                requests  .requestMatchers(HttpMethod.GET, "/v1/vehiclePlates").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/vehiclePlates/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/user/info").authenticated()
                         .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/transactions").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "/api/user/info").authenticated()
-                            .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .anyRequest().authenticated()
         );
 
@@ -76,6 +82,19 @@ public class SecurityConfig {
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         };
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Your frontend URL
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true); // Important for cookies/auth headers
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
 

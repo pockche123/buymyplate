@@ -31,4 +31,10 @@ public class UserDTO {
     private String lastName;
     private UserRole role;
 
+    public UserDTO(int userId, String username, UserRole role) {
+        this.userId = userId;
+        this.username = username;
+        this.role = role;
+    }
+
 }

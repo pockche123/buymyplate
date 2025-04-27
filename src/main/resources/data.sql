@@ -58,12 +58,12 @@ CREATE TABLE balances (
 
 
 INSERT INTO users (username, password, first_name, last_name, role) VALUES
-                                                                         ('jdoe', 'password123', 'John', 'Doe', 'CUSTOMER'),
+                                                                         ('jdoe21', 'password123', 'John', 'Doe', 'CUSTOMER'),
                                                                          ('asmith', 'secret456', 'Alice', 'Smith', 'CUSTOMER'),
                                                                          ( 'bwayne', 'darkknight', 'Bruce', 'Wayne', 'CUSTOMER'),
                                                                          ('ckent', 'superman', 'Clark', 'Kent', 'CUSTOMER'),
                                                                          ('dparker', 'sp1derm4n', 'Peter', 'Parker', 'CUSTOMER'),
-                                                                         ('admin1', 'password123', 'Alice', 'Smith', 'ADMIN');
+                                                                         ('admin12', 'adminpass321', 'Alice', 'Smith', 'ADMIN');
 
 
 

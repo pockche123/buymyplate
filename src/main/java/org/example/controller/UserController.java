@@ -2,11 +2,16 @@ package org.example.controller;
 
 import org.example.dto.UserDTO;
 import org.example.dto.UserRequestDTO;
+import org.example.model.User;
+import org.example.repository.UserRepository;
 import org.example.service.UserDTOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +21,9 @@ public class UserController {
     @Autowired
     public UserDTOService userDTOService;
 
+    @Autowired
+    public UserRepository userRepository;
+
 
     @GetMapping("/v1/users")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
@@ -24,6 +32,28 @@ public class UserController {
     ) {
         Page<UserDTO> result = userDTOService.findAllUsers(page, size);
         return ResponseEntity.ok(result);
+    }
+
+//    @GetMapping("/info")
+//    public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
+//        String username = jwt.getClaimAsString("preferred_username");
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//
+//        return ResponseEntity.ok(new UserInfoResponse(
+//                user.getId(),
+//                user.getUsername(),
+//                user.getRole()
+//        ));
+//    }
+
+
+    @GetMapping("/v1/user/info")
+    public ResponseEntity<UserDTO> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
+        String username = jwt.getClaimAsString("preferred_username");
+        User user = userRepository.findByUsername(username);
+        return ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getRole()));
+
     }
 
     @GetMapping("/v1/users/{id}")
