@@ -20,7 +20,7 @@ public class BalanceController {
 
     @GetMapping("/v1/balance/customerId/{id}")
     public ResponseEntity<BalanceDTO> getBalanceByCustomerId(@PathVariable(name = "id") int id) {
-        return ResponseEntity.ok(balanceDTOService.findByCustomerId(id));
+        return ResponseEntity.ok(balanceDTOService.findByUserId(id));
     }
 
 

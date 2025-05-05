@@ -26,5 +26,5 @@ public class VehiclePlateRequestDTO {
     @PositiveOrZero
     @Digits(integer = 8, fraction = 2)
     private Double price;
-    private Integer customerId;
+    private Integer userId;
 }

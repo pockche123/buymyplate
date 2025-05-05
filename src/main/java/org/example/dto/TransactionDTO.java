@@ -21,7 +21,7 @@ public class TransactionDTO {
     private Integer transactionId;
     @Positive
     @NotNull
-    private Integer customerId;
+    private Integer userId;
     @Positive
     @NotNull
     private Integer vehiclePlateId;

@@ -16,7 +16,7 @@ public class BalanceDTOService {
         BalanceDTO balanceDTO = new BalanceDTO();
         balanceDTO.setBalanceId(balance.getBalanceId());
         balanceDTO.setAmount(balance.getAmount());
-        balanceDTO.setCustomerId(balance.getCustomer().getId());
+        balanceDTO.setUserId(balance.getUser().getId());
 
         return balanceDTO;
     }
@@ -25,8 +25,8 @@ public class BalanceDTOService {
         return balanceRepository.findById(id).map(BalanceDTOService::convertToDTO).orElse(null);
     }
 
-    public BalanceDTO findByCustomerId(int customerId){
-        Balance balance =  balanceRepository.findByCustomer_Id(customerId);
+    public BalanceDTO findByUserId(int customerId){
+        Balance balance =  balanceRepository.findByUser_Id(customerId);
         return convertToDTO(balance);
     }
 

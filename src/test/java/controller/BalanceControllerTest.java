@@ -3,7 +3,6 @@ package controller;
 import org.example.controller.BalanceController;
 import org.example.dto.BalanceDTO;
 import org.example.dto.BalanceRequestDTO;
-import org.example.dto.CustomerDTO;
 import org.example.service.BalanceDTOService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

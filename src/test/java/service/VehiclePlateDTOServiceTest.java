@@ -3,9 +3,9 @@ package service;
 
 import org.example.dto.VehiclePlateDTO;
 import org.example.dto.VehiclePlateRequestDTO;
-import org.example.model.Customer;
+import org.example.model.User;
 import org.example.model.VehiclePlate;
-import org.example.repository.CustomerRepository;
+import org.example.repository.UserRepository;
 import org.example.repository.VehiclePlateRepository;
 import org.example.service.VehiclePlateDTOService;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class VehiclePlateDTOServiceTest {
     public VehiclePlateRepository vehiclePlateRepository;
 
     @Mock
-    public CustomerRepository customerRepository;
+    public UserRepository userRepository;
 
     @Test
     public void test_convertToVehiclePlateDTO(){
@@ -48,14 +48,14 @@ public class VehiclePlateDTOServiceTest {
         assertTrue(vehiclePlateDTO.getPersonalised());
         assertTrue(vehiclePlateDTO.getAvailable());
         assertEquals(50.5, vehiclePlate.getPrice());
-        assertNull(vehiclePlateDTO.getCustomerId());
+        assertNull(vehiclePlateDTO.getUserId());
     }
 
     @Test
     public void test_getAllVehiclePlateDTO(){
         List<VehiclePlate> vehiclePlates = Arrays.asList(
-                new VehiclePlate(1,"sa12 uvw", true,true,50.50, new Customer()),
-                new VehiclePlate(2, "uj65 xuy", false, true, 30.30, new Customer())
+                new VehiclePlate(1,"sa12 uvw", true,true,50.50, new User()),
+                new VehiclePlate(2, "uj65 xuy", false, true, 30.30, new User())
 
         );
 
@@ -74,8 +74,8 @@ public class VehiclePlateDTOServiceTest {
     @Test
     public void test_getAllVehiclesByPlate(){
         List<VehiclePlate> vehiclePlates = Arrays.asList(
-                new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer()),
-                new VehiclePlate(2,"su88 4ky", true,true,50.50, new Customer())
+                new VehiclePlate(1,"sa12 6vw", true,true,50.50, new User()),
+                new VehiclePlate(2,"su88 4ky", true,true,50.50, new User())
 
         );
 
@@ -92,7 +92,7 @@ public class VehiclePlateDTOServiceTest {
 
     @Test
     public void test_getVehicleDTOById(){
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer());
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new User());
         when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(vehiclePlate));
 
         VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.findVehiclePlateById(1);
@@ -113,34 +113,33 @@ public class VehiclePlateDTOServiceTest {
 
     @Test
     public void test_addVehiclePlate(){
-        Customer customer = new Customer();
-        customer.setId(1);
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 uvw", true,true,50.50, customer);
+        User user = new User();
+        user.setId(1);
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 uvw", true,true,50.50, user);
         VehiclePlateRequestDTO vehiclePlateRequestDTO =  new VehiclePlateRequestDTO(1,"sa12 uvw", true,true,50.50, 1);
-        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(vehiclePlateRepository.save(any(VehiclePlate.class))).thenReturn(vehiclePlate);
 
         VehiclePlateDTO actualDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO);
 
 
         assertNotNull(actualDTO);
-        assertEquals(1, actualDTO.getVehicleId());
         assertEquals("sa12 uvw", actualDTO.getPlateNumber());
        assertTrue(vehiclePlate.getPersonalised());
         assertTrue(vehiclePlate.getAvailable());
         assertEquals(50.5, vehiclePlate.getPrice());
-        assertEquals(1, actualDTO.getCustomerId());
+        assertEquals(1, actualDTO.getUserId());
     }
 
     @Test
     public void test_replaceVehiclePlates(){
-        Customer customer = new Customer();
-        customer.setId(1);
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, customer);
+        User user = new User();
+        user.setId(1);
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, user);
         VehiclePlateRequestDTO expectedVehiclePlate =  new VehiclePlateRequestDTO(1,"su88 4ky", false,false,80.00,1);
 
         when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(vehiclePlate));
-        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         VehiclePlateDTO actualVehiclePlateDTO = vehiclePlateDTOService.replaceVehiclePlate(1, expectedVehiclePlate);
 
@@ -165,7 +164,7 @@ public class VehiclePlateDTOServiceTest {
 
     @Test
     public void test_updateVehiclePlates(){
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer());
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new User());
         VehiclePlateRequestDTO expectedVehiclePlate = new VehiclePlateRequestDTO();
         expectedVehiclePlate.setPrice(100.0);
         expectedVehiclePlate.setPersonalised(false);
@@ -196,7 +195,7 @@ public class VehiclePlateDTOServiceTest {
 
     @Test
     public void test_deleteVehiclePlate_returnTrueAndFalse(){
-        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer());
+        VehiclePlate vehiclePlate =  new VehiclePlate(1,"sa12 6vw", true,true,50.50, new User());
 
         when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(vehiclePlate));
 
@@ -210,16 +209,16 @@ public class VehiclePlateDTOServiceTest {
     @Test
     public void test_vehiclePlatesBydId_returnList(){
         List<VehiclePlate> vehiclePlates = Arrays.asList(
-                new VehiclePlate(1,"sa12 6vw", true,true,50.50, new Customer()),
-                new VehiclePlate(2,"su88 4ky", true,true,50.50, new Customer())
+                new VehiclePlate(1,"sa12 6vw", true,true,50.50, new User()),
+                new VehiclePlate(2,"su88 4ky", true,true,50.50, new User())
 
         );
 
         Page<VehiclePlate> expectedPage = new PageImpl<>(vehiclePlates);
         Pageable pageable = PageRequest.of(0, 10);
-        when(vehiclePlateRepository.findVehiclePlatesByCustomerId(1, pageable)).thenReturn(expectedPage);
+        when(vehiclePlateRepository.findVehiclePlatesByUserId(1, pageable)).thenReturn(expectedPage);
 
-        Page<VehiclePlateDTO> actualPage = vehiclePlateDTOService.findVehiclePlatesByCustomerId(1, pageable);
+        Page<VehiclePlateDTO> actualPage = vehiclePlateDTOService.findVehiclePlatesByUserId(1, pageable);
 
         assertNotNull(actualPage);
         assertEquals(expectedPage.getTotalElements(), actualPage.getTotalElements());

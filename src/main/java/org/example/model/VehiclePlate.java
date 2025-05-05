@@ -15,6 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(
+        name="vehicle_plates",
         indexes = {
                 @Index(name="idx_plate_number", columnList = "plateNumber")
         }
@@ -36,8 +37,8 @@ public class VehiclePlate {
 
     private double price;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = true)
-    private Customer customer;
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
 
 
 

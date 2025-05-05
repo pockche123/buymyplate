@@ -52,11 +52,11 @@ public class VehiclePlateController {
 
     @PostMapping("/v1/vehiclePlates")
     public ResponseEntity<VehiclePlateDTO> createVehiclePlate(@RequestBody VehiclePlateRequestDTO vehiclePlateRequestDTO) {
-        if(plateValidator.checkContainsBannedWords(vehiclePlateRequestDTO.getPlateNumber())){
+        if (plateValidator.checkContainsBannedWords(vehiclePlateRequestDTO.getPlateNumber())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new VehiclePlateDTO());
         }
         VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO);
-        if(vehiclePlateDTO == null) {
+        if (vehiclePlateDTO == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(vehiclePlateDTO);
@@ -87,12 +87,12 @@ public class VehiclePlateController {
     }
 
     @GetMapping("/v1/vehiclePlates/customerId/{id}")
-    public ResponseEntity<Page<VehiclePlateDTO>> getAllVehiclePlatesByCustomerId(@PathVariable(name="id") int id,
+    public ResponseEntity<Page<VehiclePlateDTO>> getAllVehiclePlatesByUserId(@PathVariable(name="id") int id,
                                                                                  @RequestParam(name = "page", defaultValue = "0")int page,
                                                                                  @RequestParam(name = "size", defaultValue = "10") int size)
     {
         Pageable pageable = PageRequest.of(page, size);
-        Page<VehiclePlateDTO> result = vehiclePlateDTOService.findVehiclePlatesByCustomerId(id, pageable);
+        Page<VehiclePlateDTO> result = vehiclePlateDTOService.findVehiclePlatesByUserId(id, pageable);
         return ResponseEntity.ok(result);
     }
 
