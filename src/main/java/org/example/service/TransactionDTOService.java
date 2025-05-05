@@ -59,6 +59,26 @@ public class TransactionDTOService {
         transactionRepository.save(transaction);
         return convertToTransactionDTO(transaction);
     }
+//public TransactionDTO addTransaction(TransactionRequestDTO transactionRequestDTO) {
+//    Transaction transaction = new Transaction();
+//    User user = userRepository.findById(transactionRequestDTO.getUserId())
+//            .orElseThrow(() -> new RuntimeException("User not found"));
+//    VehiclePlate vehiclePlate = vehiclePlateRepository.findById(transactionRequestDTO.getVehiclePlateId())
+//            .orElseThrow(() -> new RuntimeException("Vehicle plate not found"));
+//
+//    if (transactionRequestDTO.getTransactionDate() == null || transactionRequestDTO.getPricePaid() == null) {
+//        throw new RuntimeException("Transaction date or price paid cannot be null");
+//    }
+//
+//    transaction.setUser(user);
+//    transaction.setPlate(vehiclePlate);
+//    transaction.setTransactionDate(transactionRequestDTO.getTransactionDate());
+//    transaction.setPricePaid(transactionRequestDTO.getPricePaid());
+//
+//    Transaction savedTransaction = transactionRepository.saveAndFlush(transaction); // Use saveAndFlush
+//    return convertToTransactionDTO(savedTransaction);
+//}
+
 
     public TransactionDTO replaceTransaction(int id, TransactionRequestDTO replacedTransaction){
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction id not found"));

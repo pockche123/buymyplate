@@ -124,7 +124,6 @@ public class VehiclePlateDTOServiceTest {
 
 
         assertNotNull(actualDTO);
-//        assertEquals(1, actualDTO.getVehicleId());
         assertEquals("sa12 uvw", actualDTO.getPlateNumber());
        assertTrue(vehiclePlate.getPersonalised());
         assertTrue(vehiclePlate.getAvailable());

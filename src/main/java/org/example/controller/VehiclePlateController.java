@@ -52,11 +52,11 @@ public class VehiclePlateController {
 
     @PostMapping("/v1/vehiclePlates")
     public ResponseEntity<VehiclePlateDTO> createVehiclePlate(@RequestBody VehiclePlateRequestDTO vehiclePlateRequestDTO) {
-        if(plateValidator.checkContainsBannedWords(vehiclePlateRequestDTO.getPlateNumber())){
+        if (plateValidator.checkContainsBannedWords(vehiclePlateRequestDTO.getPlateNumber())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new VehiclePlateDTO());
         }
         VehiclePlateDTO vehiclePlateDTO = vehiclePlateDTOService.addVehiclePlate(vehiclePlateRequestDTO);
-        if(vehiclePlateDTO == null) {
+        if (vehiclePlateDTO == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(vehiclePlateDTO);

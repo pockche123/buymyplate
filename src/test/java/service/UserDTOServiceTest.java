@@ -94,7 +94,6 @@ public class UserDTOServiceTest {
 
         UserDTO actualDTO = userDTOService.addUser(userRequestDTO);
 
-//        assertEquals(1, actualDTO.getUserId());
         assertEquals("user123", actualDTO.getUsername());
     }
 

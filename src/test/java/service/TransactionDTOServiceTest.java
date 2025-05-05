@@ -112,22 +112,26 @@ public class TransactionDTOServiceTest {
         when(vehiclePlateRepository.findById(1)).thenReturn(Optional.of(mockPlate));
 
         Transaction savedTransaction = new Transaction();
-
         savedTransaction.setTransactionId(1);
         savedTransaction.setUser(mockUser);
         savedTransaction.setPlate(mockPlate);
         savedTransaction.setPricePaid(50.50);
         savedTransaction.setTransactionDate(LocalDate.now());
 
-        when(transactionRepository.save(any(Transaction.class))).thenReturn(savedTransaction);
+        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO();
+        transactionRequestDTO.setUserId(1);
+        transactionRequestDTO.setVehiclePlateId(1);
+        transactionRequestDTO.setPricePaid(50.50);
+        transactionRequestDTO.setTransactionDate(LocalDate.now());
+
+//        when(transactionRepository.save(any(Transaction.class))).thenReturn(savedTransaction);
 
         // Act
         TransactionDTO result = transactionDTOService.addTransaction(
-                new TransactionRequestDTO(1, 1, 1, 50.50, LocalDate.now())
+                transactionRequestDTO
         );
 
         // Assert
-//        assertEquals(1, result.getTransactionId());
         assertEquals(50.50, result.getPricePaid());
         assertEquals(LocalDate.now(), result.getTransactionDate());
     }

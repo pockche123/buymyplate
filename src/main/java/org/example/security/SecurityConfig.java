@@ -40,12 +40,12 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(requests ->
-                requests  .requestMatchers(HttpMethod.GET, "/v1/vehiclePlates").permitAll()
+                requests
                         .requestMatchers(HttpMethod.GET, "/v1/vehiclePlates/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/user/info").authenticated()
                         .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("CUSTOMER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/v1/transactions").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/transactions").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
