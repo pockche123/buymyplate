@@ -44,21 +44,6 @@ public class UserController {
     }
 
 
-
-//    @GetMapping("/info")
-//    public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
-//        String username = jwt.getClaimAsString("preferred_username");
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//
-//        return ResponseEntity.ok(new UserInfoResponse(
-//                user.getId(),
-//                user.getUsername(),
-//                user.getRole()
-//        ));
-//    }
-
-
     @GetMapping("/v1/user/info")
     public ResponseEntity<UserDTO> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
         String username = jwt.getClaimAsString("preferred_username");
