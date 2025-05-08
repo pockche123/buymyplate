@@ -7,12 +7,15 @@ import org.example.repository.UserRepository;
 import org.example.service.UserDTOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -34,18 +37,11 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-//    @GetMapping("/info")
-//    public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
-//        String username = jwt.getClaimAsString("preferred_username");
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//
-//        return ResponseEntity.ok(new UserInfoResponse(
-//                user.getId(),
-//                user.getUsername(),
-//                user.getRole()
-//        ));
-//    }
+
+    @QueryMapping
+    public User userByUsername(@Argument String username) {
+        return userRepository.findByUsername(username);
+    }
 
 
     @GetMapping("/v1/user/info")

@@ -1,0 +1,14 @@
+# Server-side GraphQL schema: defines the User type
+type User {
+    id: Int!
+    username: String!
+    role: String!
+    firstName: String!
+    lastName: String!
+    password: String!
+}
+
+# Defines available queries on the server
+type Query{
+    userByUsername(username: String!): User
+}
