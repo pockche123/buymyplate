@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Your Spring Boot App
+#  Application service
   app:
     build: .
     ports:
@@ -19,8 +19,6 @@ services:
     restart: unless-stopped
 
   # PostgreSQL Database
-
-
   postgres:
     image: postgres:15-alpine
     environment:
