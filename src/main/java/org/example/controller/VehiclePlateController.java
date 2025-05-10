@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 public class VehiclePlateController {
     VehiclePlateDTOService vehiclePlateDTOService;
     PlateValidator plateValidator;

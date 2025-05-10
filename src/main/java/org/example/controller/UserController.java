@@ -18,7 +18,6 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired

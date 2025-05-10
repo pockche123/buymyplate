@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+#  Application service
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/buymyplate
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8090/realms/BuyMyPlate
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: buymyplate
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent data
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql  # SQL init
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5433:5432"
+  # Keycloak Authentication Server
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: keycloak
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/buymyplate
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: password
+    command:
+      - start-dev
+      - --http-port=8090
+      - --import-realm
+    volumes:
+      - ./keycloak-secure-realm.json:/opt/keycloak/data/import/realm.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8090:8090"
+
+volumes:
+  postgres_data:
