@@ -41,7 +41,6 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(requests -> requests
-                        // Permit preflight requests using CorsUtils
                         .requestMatchers(request -> CorsUtils.isPreFlightRequest(request)).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/vehiclePlates/**").permitAll()
